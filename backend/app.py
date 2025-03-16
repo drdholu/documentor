@@ -221,7 +221,7 @@ CORS(app)
 UPLOAD_FOLDER = "uploads/"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-model = "mistral-large-latest"
+model = "open-mistral-nemo"
 
 # Load Summarization Model
 summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
@@ -324,11 +324,11 @@ def summarize_document():
     messages = [
         {
             "role": "user",
-            "content": f"Translate this {text} to english if it's already not in english",
+            "content": f"Translate this {text} to english if it's already not in english. Only return back the translations and nothing else.",
         },
     ]
     )
-    print(chat_response.choices[0].message.content)
+    text = chat_response.choices[0].message.content
 
     if error:
         processing_status[file_path] = "Error"
