@@ -15,9 +15,9 @@ export const uploadDocument = async (file: File) => {
   });
 };
 
-export const checkStatus = async (documentId: string) => {
-  return api.get(`/status/${documentId}`);
-};
+// export const checkStatus = async (documentId: string) => {
+//   return api.get(`/status/${documentId}`);
+// };
 
 export const summarizeDocument = async (filePath: string) => {
   return api.post('/summarize', { file_path: filePath });

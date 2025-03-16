@@ -42,11 +42,11 @@ def upload_file():
 
 
 # ---------------------- Status Check API ----------------------
-@app.route("/status/<document_id>", methods=["GET"])
-def check_status(document_id):
-    """Returns the processing status of a document."""
-    status = processing_status.get(document_id, "Not Found")
-    return jsonify({"document_id": document_id, "status": status})
+# @app.route("/status/<document_id>", methods=["GET"])
+# def check_status(document_id):
+#     """Returns the processing status of a document."""
+#     status = processing_status.get(document_id, "Not Found")
+#     return jsonify({"document_id": document_id, "status": status})
 
 
 # ---------------------- Summarization API ----------------------
