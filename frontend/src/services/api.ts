@@ -1,8 +1,6 @@
 import axios from 'axios';
-import io from 'socket.io-client';
 
 const API_URL = import.meta.env.PROD ? 'https://your-api-url.com' : 'http://127.0.0.1:5000';
-export const socket = io(API_URL);
 
 const api = axios.create({
   baseURL: API_URL,
@@ -17,12 +15,12 @@ export const uploadDocument = async (file: File) => {
   });
 };
 
-export const translateSummary = async (text: string, targetLang: string) => {
-  return api.post('/translate', { text, target_lang: targetLang });
-};
+// export const checkStatus = async (documentId: string) => {
+//   return api.get(`/status/${documentId}`);
+// };
 
-export const askQuestion = async (question: string, documentId: string) => {
-  return api.post('/ask', { question, document_id: documentId });
+export const summarizeDocument = async (filePath: string) => {
+  return api.post('/summarize', { file_path: filePath });
 };
 
 export default api;

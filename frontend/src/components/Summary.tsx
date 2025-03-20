@@ -38,8 +38,8 @@ export function Summary({ isCollapsed, setIsCollapsed, summary, isLoading, error
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-      <div className="p-4 border-b dark:border-gray-700 flex items-center justify-between">
+    <div className="bg-white rounded-lg shadow-sm dark:bg-gray-800">
+      <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
           Document Summary
         </h2>
@@ -47,7 +47,7 @@ export function Summary({ isCollapsed, setIsCollapsed, summary, isLoading, error
           <button
             onClick={handleCopy}
             disabled={!summary?.text}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg disabled:opacity-50"
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50"
             title={copySuccess ? 'Copied!' : 'Copy to clipboard'}
           >
             <Copy className="w-5 h-5 text-gray-600 dark:text-gray-300" />
@@ -55,13 +55,13 @@ export function Summary({ isCollapsed, setIsCollapsed, summary, isLoading, error
           <button
             onClick={handleDownload}
             disabled={!summary?.text}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg disabled:opacity-50"
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50"
           >
             <Download className="w-5 h-5 text-gray-600 dark:text-gray-300" />
           </button>
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             {isCollapsed ? (
               <ChevronDown className="w-5 h-5 text-gray-600 dark:text-gray-300" />
@@ -76,7 +76,7 @@ export function Summary({ isCollapsed, setIsCollapsed, summary, isLoading, error
           {isLoading && (
             <div className="py-8">
               <LoadingSpinner />
-              <p className="text-center mt-4 text-gray-600 dark:text-gray-300">
+              <p className="mt-4 text-center text-gray-600 dark:text-gray-300">
                 Processing document...
               </p>
             </div>
@@ -85,14 +85,14 @@ export function Summary({ isCollapsed, setIsCollapsed, summary, isLoading, error
           {error && <ErrorMessage message={error} />}
 
           {!isLoading && !error && !summary && (
-            <p className="text-gray-600 dark:text-gray-300 text-center py-8">
+            <p className="py-8 text-center text-gray-600 dark:text-gray-300">
               Upload a document to see its summary here...
             </p>
           )}
 
           {summary && (
             <div className="space-y-4">
-              <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
+              <p className="leading-relaxed text-gray-800 dark:text-gray-200">
                 {summary.text}
               </p>
             </div>

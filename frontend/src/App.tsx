@@ -1,9 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
-import { socket } from './services/api';
 import { Header } from './components/Header';
 import { FileUpload } from './components/FileUpload';
-import { Summary } from './components/Summary';
 import { Translation } from './components/Translation';
 import { Footer } from './components/Footer';
 import type { Summary as SummaryType, ProcessingStatus } from './types';
@@ -17,31 +16,32 @@ function App() {
   const [error, setError] = useState<string>('');
   const [processingStatus, setProcessingStatus] = useState<ProcessingStatus | null>(null);
 
+  // Load theme preference from localStorage when the App mounts
   useEffect(() => {
-    socket.on('processing_status', (status: ProcessingStatus) => {
-      setProcessingStatus(status);
-      if (status.status === 'error') {
-        setError(status.message || 'An error occurred while processing the document');
-        setIsLoading(false);
-      } else if (status.status === 'completed') {
-        setIsLoading(false);
-      }
-    });
+    const savedTheme = localStorage.getItem('theme'); // 'dark' or 'light'
+    if (savedTheme === 'dark') {
+      setIsDarkMode(true);
+      document.documentElement.classList.add('dark');
+    } else {
+      setIsDarkMode(false);
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
 
-    socket.on('summary_ready', (data: SummaryType) => {
-      setSummary(data);
-      setIsLoading(false);
-    });
-
-    return () => {
-      socket.off('processing_status');
-      socket.off('summary_ready');
-    };
+  useEffect(() => {
+    // ...removed socket code...
   }, []);
 
   const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-    document.documentElement.classList.toggle('dark');
+    const newDarkMode = !isDarkMode;
+    setIsDarkMode(newDarkMode);
+    if (newDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
   };
 
   const handleUploadSuccess = (documentId: string) => {
@@ -57,29 +57,46 @@ function App() {
     )}>
       <Header isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
 
-      <main className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Column */}
-          <div className="space-y-6">
-            <FileUpload
-              isDarkMode={isDarkMode}
-              onUploadSuccess={handleUploadSuccess}
-            />
-            <Summary
-              isCollapsed={isCollapsed}
-              setIsCollapsed={setIsCollapsed}
-              summary={summary}
-              isLoading={isLoading}
-              error={error}
-            />
+      <main className="container max-w-6xl px-4 py-12 mx-auto">
+        <div className="mb-10 text-center">
+          <h2 className="mb-3 text-3xl font-bold tracking-tight text-gray-800 dark:text-white">
+            Smart Document Summarizer
+          </h2>
+          <p className="max-w-2xl mx-auto text-gray-600 dark:text-gray-400">
+            Upload your document and get an instant AI-powered summary. Perfect for legal documents, research papers, and more.
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          {/* Left Column (File Upload) - Wider */}
+          <div className="col-span-2 space-y-6">
+            <div className="p-6 bg-white border border-gray-100 shadow-sm rounded-xl dark:bg-gray-800/50 dark:border-gray-700">
+              <h3 className="mb-4 text-xl font-bold text-gray-800 dark:text-white">Upload Document</h3>
+              <FileUpload
+                isDarkMode={isDarkMode}
+                onUploadSuccess={handleUploadSuccess}
+              />
+            </div>
           </div>
 
-          {/* Right Column */}
+          {/* Right Column (Translation) */}
           <div className="space-y-6">
-            <Translation
-              selectedLanguage={selectedLanguage}
-              setSelectedLanguage={setSelectedLanguage}
-            />
+            <div className="p-6 bg-white border border-gray-100 shadow-sm rounded-xl dark:bg-gray-800/50 dark:border-gray-700">
+              <Translation
+                selectedLanguage={selectedLanguage}
+                setSelectedLanguage={setSelectedLanguage}
+              />
+            </div>
+            
+            <div className="p-6 bg-white border border-gray-100 shadow-sm rounded-xl dark:bg-gray-800/50 dark:border-gray-700">
+              <h3 className="mb-3 font-bold text-gray-800 dark:text-white">How It Works</h3>
+              <ol className="ml-5 space-y-2 text-sm text-gray-600 list-decimal dark:text-gray-400">
+                <li>Upload your document (PDF, DOCX, or TXT format)</li>
+                <li>Our AI analyzes the content</li>
+                <li>View the generated summary</li>
+                <li>Optionally translate to another language</li>
+              </ol>
+            </div>
           </div>
         </div>
       </main>
